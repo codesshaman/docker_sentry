@@ -39,6 +39,7 @@ help:
 	@echo -e "$(WARN_COLOR)- make net			: Create network"
 	@echo -e "$(WARN_COLOR)- make push			: Push changes to the github"
 	@echo -e "$(WARN_COLOR)- make ps			: View configuration"
+	@echo -e "$(WARN_COLOR)- make user			: Create sentry user"
 	@echo -e "$(WARN_COLOR)- make re			: Rebuild dash configuration"
 	@echo -e "$(WARN_COLOR)- make clean			: Cleaning configuration$(NO_COLOR)"
 
@@ -100,6 +101,10 @@ re:
 ps:
 	@printf "$(BLUE)==== View configuration ${name}... ====$(NO_COLOR)\n"
 	@docker-compose -f ./docker-compose.yml ps
+
+user:
+	@printf "$(ERROR_COLOR)==== Create user... ====$(NO_COLOR)\n"
+	@docker exec -it ${SENTRY_API_NAME} sentry createuser
 
 clean: 
 	@printf "$(ERROR_COLOR)==== Cleaning configuration ${name}... ====$(NO_COLOR)\n"

@@ -37,3 +37,9 @@ make build
 ```
 make migrate
 ```
+
+#### Create user
+
+```
+make user
+```

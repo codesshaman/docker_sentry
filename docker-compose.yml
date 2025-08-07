@@ -52,7 +52,17 @@ services:
       - POSTGRES_USER=$SENTRY_DB_USER
       - POSTGRES_PASSWORD=$SENTRY_DB_PASSWORD
       - POSTGRES_DB=$SENTRY_DB_NAME
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: unless-stopped
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d:z
+      - db-volume:/var/lib/postgresql/data:z
+    ports:
+      - "$POSTGRES_EXTERNAL_PORT:5432"
     networks:
       network:
         ipv4_address: $SENTDB_HOST
@@ -76,3 +86,10 @@ networks:
       config:
         - subnet: $SENTRY_ADDR
           gateway: $SENTRY_GATE
+
+volumes:
+  db-volume:
+    driver_opts:
+      o: bind
+      type: none
+      device: $DB_VOLUME
