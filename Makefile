@@ -32,6 +32,7 @@ help:
 	@echo -e "$(WARN_COLOR)- make con			: Connect to the container"
 	@echo -e "$(WARN_COLOR)- make down			: Stopping configuration"
 	@echo -e "$(WARN_COLOR)- make env			: Create .env-file"
+	@echo -e "$(WARN_COLOR)- make key			: Generate sentry secret key"
 	@echo -e "$(WARN_COLOR)- make git			: Set user name and email to git"
 	@echo -e "$(WARN_COLOR)- make logs			: Show dash logs"
 	@echo -e "$(WARN_COLOR)- make net			: Create network"
@@ -67,9 +68,13 @@ git:
 	@printf "$(YELLOW)==== Set user name and email to git for ${name} repo... ====$(NO_COLOR)\n"
 	@bash ./scripts/gituser.sh
 
+key:
+	@printf "$(YELLOW)==== Set user name and email to git for ${name} repo... ====$(NO_COLOR)\n"
+	@bash ./scripts/sentry_key.sh
+
 logs:
 	@printf "$(YELLOW)==== ${name} logs... ====$(NO_COLOR)\n"
-	@docker logs dash
+	@docker logs ${SENTRY_API_NAME}
 
 net:
 	@printf "$(YELLOW)==== Создание сети для конфигурации ${name}... ====$(NO_COLOR)\n"

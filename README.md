@@ -14,6 +14,12 @@ cd <clonned_directory>
 make env
 ```
 
+#### Create secret key
+
+```
+make key
+```
+
 #### Create network
 
 ```
