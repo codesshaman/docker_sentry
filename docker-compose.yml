@@ -1,0 +1,70 @@
+---
+
+x-sentry-common: &sentry-common
+  image: $SENTRY_IMAGE
+  platform: linux/amd64
+  env_file:
+    - .env
+  depends_on:
+    - db-sentry
+    - redis
+
+services:
+  sentry-api:
+    <<: *sentry-common
+    container_name: $SENTRY_API_NAME
+    ports:
+      - "$SENAPI_PORT:9000"
+    restart: unless-stopped
+    networks:
+      network:
+        ipv4_address: $SENAPI_HOST
+
+  sentry-worker:
+    <<: *sentry-common
+    container_name: $SENTRY_WKR_NAME
+    command: sentry run worker
+    restart: unless-stopped
+    networks:
+      network:
+        ipv4_address: $SENWKR_HOST
+
+  sentry-cron:
+    <<: *sentry-common
+    container_name: $SENTRY_CRON_NAME
+    command: sentry run cron
+    restart: unless-stopped
+    networks:
+      network:
+        ipv4_address: $SENCRN_HOST
+
+  db-sentry:
+    image: $POSTGRES_IMAGE
+    container_name: $POSTGRES_NAME
+    environment:
+      - POSTGRES_USER=sentry
+      - POSTGRES_PASSWORD=sentry
+      - POSTGRES_DB=sentry
+    restart: unless-stopped
+    networks:
+      network:
+        ipv4_address: $SENTDB_HOST
+
+  redis:
+    image: $REDIS_IMAGE
+    container_name: $REDIS_NAME
+    ports:
+      - "$POSTGRES_PORT:9000"
+    restart: unless-stopped
+    networks:
+      network:
+        ipv4_address: $SENRDS_HOST
+
+networks:
+  network:
+    driver: bridge
+    name: $SENTRY_NET
+    ipam:
+      config:
+        - subnet: $SENTRY_ADDR
+          gateway: $SENTRY_GATE
