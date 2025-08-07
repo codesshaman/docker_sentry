@@ -35,6 +35,7 @@ help:
 	@echo -e "$(WARN_COLOR)- make key			: Generate sentry secret key"
 	@echo -e "$(WARN_COLOR)- make git			: Set user name and email to git"
 	@echo -e "$(WARN_COLOR)- make logs			: Show dash logs"
+	@echo -e "$(WARN_COLOR)- make migrate			: Create migrations"
 	@echo -e "$(WARN_COLOR)- make net			: Create network"
 	@echo -e "$(WARN_COLOR)- make push			: Push changes to the github"
 	@echo -e "$(WARN_COLOR)- make ps			: View configuration"
@@ -50,8 +51,8 @@ config:
 	@docker-compose -f ./docker-compose.yml config
 
 con:
-	@printf "$(ERROR_COLOR)==== Copy changes from repo... ====$(NO_COLOR)\n"
-	@docker exec -it ${SENTRY_NAME} bash
+	@printf "$(ERROR_COLOR)==== Connect to container... ====$(NO_COLOR)\n"
+	@docker exec -it ${SENTRY_API_NAME} bash
 
 down:
 	@printf "$(ERROR_COLOR)==== Stopping configuration ${name}... ====$(NO_COLOR)\n"
@@ -69,12 +70,16 @@ git:
 	@bash ./scripts/gituser.sh
 
 key:
-	@printf "$(YELLOW)==== Set user name and email to git for ${name} repo... ====$(NO_COLOR)\n"
+	@printf "$(YELLOW)==== Set secret key for ${name} repo... ====$(NO_COLOR)\n"
 	@bash ./scripts/sentry_key.sh
 
 logs:
 	@printf "$(YELLOW)==== ${name} logs... ====$(NO_COLOR)\n"
 	@docker logs ${SENTRY_API_NAME}
+
+migrate:
+	@printf "$(YELLOW)==== ${name} migrations... ====$(NO_COLOR)\n"
+	@docker exec -it ${SENTRY_API_NAME} sentry upgrade
 
 net:
 	@printf "$(YELLOW)==== Создание сети для конфигурации ${name}... ====$(NO_COLOR)\n"

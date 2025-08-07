@@ -1,6 +1,6 @@
 #!/bin/bash
 
-KEY=$(docker run --rm sentry:latest generate-secret-key)
+# Генерация случайного 32-символьного хэша из a-zA-Z0-9
+HASH=$(LC_ALL=C tr -dc 'a-zA-Z0-9' </dev/urandom | head -c 32)
 
-echo SENTRY_SECRET_KEY=${KEY} >> .env
-
+echo "SENTRY_SECRET_KEY=$HASH" >> .env

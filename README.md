@@ -28,7 +28,12 @@ make net
 
 #### Build configuration
 
-
 ```
 make build
+```
+
+#### Create migrations
+
+```
+make migrate
 ```
