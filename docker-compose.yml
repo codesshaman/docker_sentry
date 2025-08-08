@@ -62,7 +62,7 @@ services:
       - ./initdb:/docker-entrypoint-initdb.d:z
       - $DB_VOLUME:/var/lib/postgresql/data:z
     ports:
-      - "$POSTGRES_EXTERNAL_PORT:5432"
+      - "$POSTGRES_PORT:5432"
     networks:
       network:
         ipv4_address: $SENTDB_HOST
