@@ -60,7 +60,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./initdb:/docker-entrypoint-initdb.d:z
-      - db-volume:/var/lib/postgresql/data:z
+      - $DB_VOLUME:/var/lib/postgresql/data:z
     ports:
       - "$POSTGRES_EXTERNAL_PORT:5432"
     networks:
@@ -71,7 +71,7 @@ services:
     image: $REDIS_IMAGE
     container_name: $REDIS_NAME
     ports:
-      - "$POSTGRES_PORT:9000"
+      - "$REDIS_PORT:6379"
     restart: unless-stopped
     networks:
       network:
@@ -86,10 +86,3 @@ networks:
       config:
         - subnet: $SENTRY_ADDR
           gateway: $SENTRY_GATE
-
-volumes:
-  db-volume:
-    driver_opts:
-      o: bind
-      type: none
-      device: $DB_VOLUME
